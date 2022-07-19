@@ -11,7 +11,7 @@ function App() {
 
   const { counters } = useAppSelector((state) => ({
     counters: state.counters.counters
-  }), shallowEqual)
+  }))
 
 
   console.log(`counters`, counters)
@@ -22,7 +22,6 @@ function App() {
 
   // handle add counter => add counter to state
 
-  let tempCounter: boolean = false
 
   const handleAdd = (id: string): void => {
     dispatch(increment(id))
@@ -43,45 +42,51 @@ function App() {
     return sum
   }
 
-  const addMoreCounters = (): void => {
+  const addMoreCounters = (subscribeToUpdate: boolean): void => {
     const id = nanoid()
-    console.log(`tempCounter`, tempCounter)
-    dispatch(addCounter({ id, value: valueAdder(), subscribeToUpdate: tempCounter }))
-    if (tempCounter) { tempCounter = !tempCounter }
+    dispatch(addCounter({ id, value: valueAdder(), subscribeToUpdate }))
   }
 
   useEffect(() => {
     const filterSubscribe = counters.filter(c => c.subscribeToUpdate === true)
+    if (!filterSubscribe.length) return
     console.log(`filterSubscribe`, filterSubscribe)
-    const timer = setInterval(() => {
+    const timer = setInterval(function () {
       filterSubscribe.forEach(el => {
         dispatch(increment(el.id))
       })
     }, 1000)
+
     return () => clearInterval(timer)
-  }, [tempCounter])
+  }, [counters.length])
+
 
   return (
     <div className="App">
       <div className='container'>
         <h1>Супер счетчик</h1>
         {counters.map((c, idx) => {
-          if ((idx + 1) % 4 === 0) {
-            tempCounter = true
+          if ((idx + 2) % 4 === 0) {
+            console.log(`idx`, idx)
           }
           return (
-            <div className="card" key={c.id}>
-              <button style={{ display: (idx + 1) % 4 === 0 ? 'none' : 'block' }} onClick={() => handleSubtr(c.id)}>-</button>
-              <p className='counter'>{c.value}</p>
-              <button style={{ display: (idx + 1) % 4 === 0 ? 'none' : 'block' }} onClick={() => handleAdd(c.id)}>+</button>
-              <button onClick={() => handleDeleteCounter(c.id)}>Удалить</button>
-            </div>
+            <Fragment key={c.id}>
+              <div className="card" >
+                <button style={{ display: ((idx + 1) % 4 === 0 || c.subscribeToUpdate) ? 'none' : 'block' }} onClick={() => handleSubtr(c.id)}>-</button>
+                <p className='counter'>{c.value}</p>
+                <button style={{ display: ((idx + 1) % 4 === 0 || c.subscribeToUpdate) ? 'none' : 'block' }} onClick={() => handleAdd(c.id)}>+</button>
+                <button onClick={() => handleDeleteCounter(c.id)}>Удалить</button>
+              </div>
+              <button style={{ display: (counters.length === idx + 1) ? 'block' : 'none' }} onClick={() => {
+                addMoreCounters((idx + 2) % 4 === 0)
+              }}>Добавить еще!</button>
+
+            </Fragment>
           )
         })}
-        <p>
-          <button onClick={addMoreCounters}>Добавить еще!</button>
-        </p>
-
+        {counters.length === 0 && <button onClick={() => {
+          addMoreCounters(false)
+        }}>Добавить еще!</button>}
         <div className="read-the-docs">
           <p>· Каждый четвертый счетчик на странице не содержит кнопок + и - , а каждую секунду увеличивает свое значение на один; </p>
           <p>· При добавлении нового счетчика на страницу его значение будет равно сумме значений всех других счетчиков на странице (например, на странице два счетчика со значениями 3 и 7, у нового счетчика будет значение 10); </p>
