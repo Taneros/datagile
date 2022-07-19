@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import './App.css'
 import { useAppDispatch, useAppSelector } from './App/hooks'
 import { increment, decrement, deleteCounter, addCounter, Counter } from './features/counter/counter-slice'
@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import { shallowEqual } from 'react-redux'
 
 function App() {
-  const [noBtns, setNoBtn] = useState<Counter | null>(null)
+  const [noBtns, setNoBtn] = useState<boolean>(false)
 
 
   const { counters } = useAppSelector((state) => ({
@@ -20,7 +20,9 @@ function App() {
 
   // get all data from state
 
-  // handle add counter => add counter to state 
+  // handle add counter => add counter to state
+
+  let tempCounter: boolean = false
 
   const handleAdd = (id: string): void => {
     dispatch(increment(id))
@@ -43,30 +45,29 @@ function App() {
 
   const addMoreCounters = (): void => {
     const id = nanoid()
-    dispatch(addCounter({ id, value: valueAdder() }))
+    console.log(`tempCounter`, tempCounter)
+    dispatch(addCounter({ id, value: valueAdder(), subscribeToUpdate: tempCounter }))
+    if (tempCounter) { tempCounter = !tempCounter }
   }
 
   useEffect(() => {
-    if (noBtns === null) return
-    console.log(`useEffect`,)
-    const countInterval = setInterval(() => {
-
-      dispatch(increment(noBtns.id))
+    const filterSubscribe = counters.filter(c => c.subscribeToUpdate === true)
+    console.log(`filterSubscribe`, filterSubscribe)
+    const timer = setInterval(() => {
+      filterSubscribe.forEach(el => {
+        dispatch(increment(el.id))
+      })
     }, 1000)
-    setNoBtn(null)
-    return () => clearInterval(countInterval)
-  }, [noBtns])
-
-  console.log('noBtns', noBtns)
+    return () => clearInterval(timer)
+  }, [tempCounter])
 
   return (
     <div className="App">
       <div className='container'>
-
         <h1>Супер счетчик</h1>
         {counters.map((c, idx) => {
           if ((idx + 1) % 4 === 0) {
-            setNoBtn(c)
+            tempCounter = true
           }
           return (
             <div className="card" key={c.id}>

@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export interface Counter {
   id: string
   value: number
+  subscribeToUpdate: boolean
 }
 
 interface CounterState {
@@ -10,7 +11,9 @@ interface CounterState {
 }
 
 const initialState: CounterState = {
-  counters: [{ id: 'lsdkfjs-898-szxczxdf', value: 1 }],
+  counters: [
+    { id: 'lsdkfjs-898-szxczxdf', value: 1, subscribeToUpdate: false },
+  ],
 }
 
 const counterSlice = createSlice({
