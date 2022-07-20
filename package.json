@@ -1,16 +1,23 @@
 {
   "name": "datagile",
+  "homepage": "https://taneros.github.io/datagile/",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "tsc && vite build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.3",
+    "gh-pages": "^4.0.0",
+    "nanoid": "^4.0.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-redux": "^8.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",
