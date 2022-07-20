@@ -6,11 +6,11 @@
 
 - Склонировать репозиторий в новую папку:
 
-_`git clone https://github.com/Taneros/datagile.git`_, - установить зависимости
+_`git clone https://github.com/Taneros/datagile.git`_
 
 - В корневой папке выполнить команды:
 
-_`npm i`_, - установить зависимости
+_`npm i`_ - установить зависимости
 
 ---
 
