@@ -1,27 +1,22 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import './App.css'
 import { useAppDispatch, useAppSelector } from './App/hooks'
 import { increment, decrement, deleteCounter, addCounter, Counter } from './features/counter/counter-slice'
 import { nanoid } from 'nanoid'
 import { shallowEqual } from 'react-redux'
+import reactLogo from './assets/react.svg'
+
 
 function App() {
-  const [noBtns, setNoBtn] = useState<boolean>(false)
-
 
   const { counters } = useAppSelector((state) => ({
     counters: state.counters.counters
-  }))
+  }), shallowEqual)
 
 
   console.log(`counters`, counters)
 
   const dispatch = useAppDispatch()
-
-  // get all data from state
-
-  // handle add counter => add counter to state
-
 
   const handleAdd = (id: string): void => {
     dispatch(increment(id))
@@ -63,8 +58,11 @@ function App() {
 
   return (
     <div className="App">
+      <div>  <a href="https://reactjs.org" target="_blank">
+        <img src={reactLogo} className="logo react" alt="React logo" />
+      </a></div>
       <div className='container'>
-        <h1>Супер счетчик</h1>
+        <h1>Супер счётчик</h1>
         {counters.map((c, idx) => {
           if ((idx + 2) % 4 === 0) {
             console.log(`idx`, idx)
@@ -77,7 +75,7 @@ function App() {
                 <button style={{ display: ((idx + 1) % 4 === 0 || c.subscribeToUpdate) ? 'none' : 'block' }} onClick={() => handleAdd(c.id)}>+</button>
                 <button onClick={() => handleDeleteCounter(c.id)}>Удалить</button>
               </div>
-              <button style={{ display: (counters.length === idx + 1) ? 'block' : 'none' }} onClick={() => {
+              <button className='button-more' style={{ display: (counters.length === idx + 1) ? 'block' : 'none' }} onClick={() => {
                 addMoreCounters((idx + 2) % 4 === 0)
               }}>Добавить еще!</button>
 
@@ -86,14 +84,14 @@ function App() {
         })}
         {counters.length === 0 && <button onClick={() => {
           addMoreCounters(false)
-        }}>Добавить еще!</button>}
+        }}> Добавить счётчик! </button>}
         <div className="read-the-docs">
-          <p>· Каждый четвертый счетчик на странице не содержит кнопок + и - , а каждую секунду увеличивает свое значение на один; </p>
-          <p>· При добавлении нового счетчика на страницу его значение будет равно сумме значений всех других счетчиков на странице (например, на странице два счетчика со значениями 3 и 7, у нового счетчика будет значение 10); </p>
-          <p>· Данные счетчиков должны храниться в глобальном state (reducer); Дизайн не важен. Результатом выполнения задания должен быть npm-пакет с реализованным приложением. Файл package.json должен содержать команду для запуска приложения для просмотра в браузере. Важно: приложение должно быть написано с использованием синтаксиса ES6 (и выше)/Typescript. Результат можно выслать в виде архива или в виде ссылки на внешний ресурс (например, github)</p>
+          <p>Здесь мой GitHub c портфолио и пэт проектами: <a href="https://github.com/Taneros">GitHub</a></p>
+          <p>Здесь мое резюме на: <a href="https://spb.hh.ru/resume/78455b42ff0b10b6b70039ed1f496c3554514b?hhtmFrom=resume_list">HH </a></p>
+          <p>Здесь мое резюме на : <a href="https://docs.google.com/document/d/1N3HXmzZawJsJQuCbZbTWzZiILi47BsBvA-H4N9WEujo/edit?usp=sharing">английском</a></p>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

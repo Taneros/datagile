@@ -12,14 +12,27 @@
 }
 
 .card {
-  padding: 2em;
+  padding: 0.5em;
   display: flex;
 }
 
 .read-the-docs {
   color: #888;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 10rem;
 }
 
 .counter {
   width: 5rem;
+}
+
+.logo.react {
+  width: 5rem;
+}
+
+.button-more {
+  margin-top: 2rem;
 }
