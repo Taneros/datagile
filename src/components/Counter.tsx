@@ -9,7 +9,7 @@ import {
   deleteCounter, increment
 } from '../features/counter/counter-slice'
 
-export const Counter = () => {
+export const Counter: React.FC = () => {
   const [noBtns, setNoBtns] = useState<CounterInterface[]>([])
 
   const { counters } = useAppSelector(

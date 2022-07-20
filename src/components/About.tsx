@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const About = () => {
+export const About: React.FC = () => {
   return (
     <div className="read-the-docs">
       <p>Здесь мой GitHub c портфолио и пэт проектами: <a href="https://github.com/Taneros">GitHub</a></p>
